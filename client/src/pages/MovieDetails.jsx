@@ -9,12 +9,14 @@ import MovieCard from '../components/MovieCard'
 import Loading from '../components/Loading'
 import { useAppContext } from '../context/AppContext'
 import toast from 'react-hot-toast'
+import TheaterSelect from '../components/TheaterSelect'
 
 const MovieDetails = () => {
 
   const navigate = useNavigate()
   const {id} = useParams()
   const [show, setShow] = useState(null)
+  const [showTheaterSelect, setShowTheaterSelect] = useState(false)
 
   const {shows, axios, getToken, user, fetchFavoriteMovies, favoriteMovies, image_base_url} = useAppContext()
 
@@ -74,7 +76,7 @@ const MovieDetails = () => {
               <PlayCircleIcon className="w-5 h-5"/>
               Watch Trailer
               </button>
-            <a href="#dateSelect" className='px-10 py-3 text-sm bg-primary hover:bg-primary-dull transition rounded-md font-medium cursor-pointer active:scale-95'>Buy Tickets</a>
+            <button onClick={() => setShowTheaterSelect(true)} className='px-10 py-3 text-sm bg-primary hover:bg-primary-dull transition rounded-md font-medium cursor-pointer active:scale-95'>Buy Tickets</button>
             <button onClick={handleFavorite} className='bg-gray-700 p-2.5 rounded-full transition cursor-pointer active:scale-95'>
               <Heart className={`w-5 h-5 ${favoriteMovies.find(movie => movie._id === id) ? 'fill-primary text-primary' : ""} `}/>
             </button>
@@ -105,6 +107,15 @@ const MovieDetails = () => {
       <div className='flex justify-center mt-20'>
           <button onClick={()=> {navigate('/movies'); scrollTo(0,0)}} className='px-10 py-3 text-sm bg-primary hover:bg-primary-dull transition rounded-md font-medium cursor-pointer'>Show more</button>
       </div>
+
+      <TheaterSelect 
+        isOpen={showTheaterSelect} 
+        onClose={() => setShowTheaterSelect(false)}
+        onSelect={() => {
+          setShowTheaterSelect(false)
+          document.getElementById('dateSelect')?.scrollIntoView({ behavior: 'smooth' })
+        }}
+      />
 
     </div>
   ) : <Loading />

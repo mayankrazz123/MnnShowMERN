@@ -6,6 +6,7 @@ import { CheckIcon, DeleteIcon, StarIcon } from 'lucide-react';
 import { kConverter } from '../../lib/kConverter';
 import { useAppContext } from '../../context/AppContext';
 import toast from 'react-hot-toast';
+import TheaterSelect from '../../components/TheaterSelect';
 
 const AddShows = () => {
 
@@ -18,6 +19,8 @@ const AddShows = () => {
     const [dateTimeInput, setDateTimeInput] = useState("");
     const [showPrice, setShowPrice] = useState("");
     const [addingShow, setAddingShow] = useState(false)
+    const [selectedTheater, setSelectedTheater] = useState(null)
+    const [showTheaterSelect, setShowTheaterSelect] = useState(false)
 
 
      const fetchNowPlayingMovies = async () => {
@@ -129,6 +132,19 @@ const AddShows = () => {
         </div>
       </div>
 
+        {/* Theater Selection */}
+        <div className="mt-8">
+            <label className="block text-sm font-medium mb-2">Select Theater</label>
+            <button 
+                onClick={() => setShowTheaterSelect(true)}
+                className="inline-flex items-center gap-2 border border-gray-600 px-4 py-2 rounded-md hover:border-primary transition-colors"
+            >
+                <span className="text-gray-300">
+                    {selectedTheater ? selectedTheater.name : "Select Theater - Bhopal"}
+                </span>
+            </button>
+        </div>
+
        {/* Show Price Input */}
        <div className="mt-8">
             <label className="block text-sm font-medium mb-2">Show Price</label>
@@ -173,6 +189,15 @@ const AddShows = () => {
        <button onClick={handleSubmit} disabled={addingShow} className="bg-primary text-white px-8 py-2 mt-6 rounded hover:bg-primary/90 transition-all cursor-pointer" >
             Add Show
         </button>
+
+        <TheaterSelect 
+            isOpen={showTheaterSelect}
+            onClose={() => setShowTheaterSelect(false)}
+            onSelect={(theater) => {
+                setSelectedTheater(theater)
+                setShowTheaterSelect(false)
+            }}
+        />
     </>
   ) : <Loading />
 }

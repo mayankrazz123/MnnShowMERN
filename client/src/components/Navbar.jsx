@@ -4,16 +4,18 @@ import { assets } from '../assets/assets'
 import { MenuIcon, SearchIcon, TicketPlus, XIcon } from 'lucide-react'
 import { useClerk, UserButton, useUser } from '@clerk/clerk-react'
 import { useAppContext } from '../context/AppContext'
+import TheaterSelect from './TheaterSelect'
 
 const Navbar = () => {
 
- const [isOpen, setIsOpen] = useState(false)
- const {user} = useUser()
- const {openSignIn} = useClerk()
+  const [isOpen, setIsOpen] = useState(false)
+  const [showTheaterSelect, setShowTheaterSelect] = useState(false)
+  const {user} = useUser()
+  const {openSignIn} = useClerk()
 
- const navigate = useNavigate()
+  const navigate = useNavigate()
 
- const {favoriteMovies} = useAppContext()
+  const {favoriteMovies} = useAppContext()
 
   return (
     <div className='fixed top-0 left-0 z-50 w-full flex items-center justify-between px-6 md:px-16 lg:px-36 py-5'>
@@ -27,7 +29,7 @@ const Navbar = () => {
 
         <Link onClick={()=> {scrollTo(0,0); setIsOpen(false)}} to='/'>Home</Link>
         <Link onClick={()=> {scrollTo(0,0); setIsOpen(false)}} to='/movies'>Movies</Link>
-        <Link onClick={()=> {scrollTo(0,0); setIsOpen(false)}} to='/'>Theaters</Link>
+        <button onClick={()=> setShowTheaterSelect(true)} className='text-left'>Theaters</button>
         <Link onClick={()=> {scrollTo(0,0); setIsOpen(false)}} to='/'>Releases</Link>
        {favoriteMovies.length > 0 && <Link onClick={()=> {scrollTo(0,0); setIsOpen(false)}} to='/favorite'>Favorites</Link>}
       </div>
@@ -49,6 +51,16 @@ const Navbar = () => {
     </div>
 
     <MenuIcon className='max-md:ml-4 md:hidden w-8 h-8 cursor-pointer' onClick={()=> setIsOpen(!isOpen)}/>
+
+      <TheaterSelect 
+        isOpen={showTheaterSelect} 
+        onClose={() => setShowTheaterSelect(false)}
+        onSelect={() => {
+          setShowTheaterSelect(false)
+          navigate('/movies')
+          scrollTo(0, 0)
+        }}
+      />
 
     </div>
   )
